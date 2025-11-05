@@ -1,0 +1,25 @@
+# Configuration file for the pointcloud outlier filter node
+
+/**:
+  ros__parameters:
+    # Input/Output topics
+    input_topic: "/superodometry/velodyne_cloud_registered"
+    output_topic: "/superodometry/velodyne_cloud_outlier_filtered"
+    removed_points_topic: "/superodometry/velodyne_cloud_removed_outliers"
+
+    # Filter type: "none", "statistical", "radius", or "cascaded"
+    # - "none": No filtering, passthrough mode (useful for testing/comparison)
+    # - "statistical": Good for removing points in sparse regions (such as far edges)
+    # - "radius": Better for removing isolated floating artifacts while keeping valid edges
+    # - "cascaded": Applies radius filtering first, then statistical (most aggressive, ~2x slower)
+    filter_type: "radius"
+
+    # Statistical Outlier Removal (SOR) parameters
+    # Removes points whose mean distance to K neighbors exceeds a threshold
+    sor_mean_k: 50 # Number of nearest neighbors to analyze for each point
+    sor_stddev_mul: 2.0 # Standard deviation multiplier threshold
+
+    # Radius Outlier Removal (ROR) parameters
+    # Removes points that have fewer than min_neighbors within the search radius
+    ror_radius: 0.5 # Search radius in meters (adjust based on point density)
+    ror_min_neighbors: 2 # Minimum neighbors required within radius
