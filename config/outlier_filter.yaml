@@ -3,16 +3,17 @@
 /**:
   ros__parameters:
     # Input/Output topics
-    input_topic: "/superodometry/velodyne_cloud_registered"
-    output_topic: "/superodometry/velodyne_cloud_outlier_filtered"
-    removed_points_topic: "/superodometry/velodyne_cloud_removed_outliers"
+    input_topic: "/spot2/base/autonomy/slam/registered_scan"
+    output_topic: "/spot2/base/autonomy/slam/registered_scan_outlier_filtered"
+    removed_points_topic: "/spot2/base/autonomy/slam/registered_scan_removed_outliers"
 
-    # Filter type: "none", "statistical", "radius", or "cascaded"
+    # Filter type: "none", "statistical", "radius", "cascaded", or "reflection"
     # - "none": No filtering, passthrough mode (useful for testing/comparison)
     # - "statistical": Good for removing points in sparse regions (such as far edges)
     # - "radius": Better for removing isolated floating artifacts while keeping valid edges
     # - "cascaded": Applies radius filtering first, then statistical (most aggressive, ~2x slower)
-    filter_type: "radius"
+    # - "reflection": Removes ground reflections from reflective floors
+    filter_type: "reflection"
 
     # Statistical Outlier Removal (SOR) parameters
     # Removes points whose mean distance to K neighbors exceeds a threshold
@@ -23,3 +24,9 @@
     # Removes points that have fewer than min_neighbors within the search radius
     ror_radius: 0.5 # Search radius in meters (adjust based on point density)
     ror_min_neighbors: 2 # Minimum neighbors required within radius
+
+    # Ground Reflection Filter Parameters 
+    reflection_grid_resolution: 0.15 # Grid resolution for ground estimation (meters)
+    reflection_min_points_for_ground: 3 # Minimum points needed in a grid cell to estimate ground height
+    reflection_below_ground_threshold: 0.08 # Distance below local ground to filter points (meters)
+    reflection_search_radius: 0.3 # Radius to search for nearby ground estimates (meters)
