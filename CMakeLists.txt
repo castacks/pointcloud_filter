@@ -5,6 +5,12 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# --------------------------- #
+# Force CMake to use standard system MPI compilers
+set(MPI_C_COMPILER "/usr/local/mpi/bin/mpicc" CACHE STRING "Forced C MPI Compiler" FORCE)
+set(MPI_CXX_COMPILER "/usr/local/mpi/bin/mpicxx" CACHE STRING "Forced CXX MPI Compiler" FORCE)
+# --------------------------- #
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
