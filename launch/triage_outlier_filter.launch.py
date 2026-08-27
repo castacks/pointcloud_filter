@@ -13,13 +13,24 @@ import os
 def generate_launch_description():
     pkg_share = get_package_share_directory("pointcloud_filter")
 
-    robot_name = LaunchConfiguration('robot_name', default='spot2')
+    robot_name = LaunchConfiguration("robot_name")
 
     # Declare launch arguments
     config_file_arg = DeclareLaunchArgument(
         "config_file",
         default_value=os.path.join(pkg_share, "config", "outlier_filter.yaml"),
         description="Path to the outlier filter configuration file",
+    )
+    robot_name_arg = DeclareLaunchArgument(
+        "robot_name",
+        default_value="spot2",
+        description="Robot namespace",
+    )
+
+    use_sim_time_arg = DeclareLaunchArgument(
+        "use_sim_time",
+        default_value="false",
+        description="Use simulation clock",
     )
 
     # Outlier filter node
@@ -29,7 +40,12 @@ def generate_launch_description():
         name="outlier_filter",
         namespace=robot_name,
         output="screen",
-        parameters=[LaunchConfiguration("config_file")],
+        parameters=[
+            LaunchConfiguration("config_file"),
+            {"use_sim_time": LaunchConfiguration("use_sim_time")},
+        ],
     )
 
-    return LaunchDescription([config_file_arg, outlier_filter_node])
+    return LaunchDescription(
+        [config_file_arg, robot_name_arg, use_sim_time_arg, outlier_filter_node]
+    )
